@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FuncEdge.hpp"
+#include "FuncEdge.h"
 
 namespace CreateDFD
 {
