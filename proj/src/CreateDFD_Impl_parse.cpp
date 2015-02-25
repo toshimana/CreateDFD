@@ -30,9 +30,10 @@ namespace CreateDFD
 	{
 		template<typename Iterator>
 		struct parseFuncEdge
-			: qi::grammar<Iterator,FuncEdge()>
+			: qi::grammar<Iterator,std::vector<FuncEdge>()>
 		{
-			qi::rule<Iterator, FuncEdge()>    result;
+			qi::rule<Iterator, std::vector<FuncEdge>()> result;
+			qi::rule<Iterator, FuncEdge()> edge;
 			qi::rule<Iterator, std::string()> func;
 			qi::rule<Iterator, std::vector<std::string>()> nodes;
 			qi::rule<Iterator, std::string()> node;
@@ -40,7 +41,8 @@ namespace CreateDFD
 			parseFuncEdge()
 				: parseFuncEdge::base_type(result)
 			{
-				result  = func >> nodes >> nodes >> qi::eol;
+				result = edge % qi::eol;
+				edge = func >> nodes >> nodes;
 				func %= qi::lexeme[+(qi::char_ - qi::lit( '[' ))];
 				nodes = qi::lit( '[' ) >> node % qi::lit( ',' ) >> qi::lit( ']' );
 				node  = qi::lexeme[+(qi::char_ - (qi::lit( ',' ) | qi::lit( ']' )))];
@@ -50,12 +52,12 @@ namespace CreateDFD
 };
 
 bool
-CreateDFD::Impl::parse( const std::string& in, FuncEdge& e )
+CreateDFD::Impl::parse( const std::string& in, std::vector<FuncEdge>& edges )
 {
 	parseFuncEdge<std::string::iterator> parseFE;
 
 	std::string str( in );
 	auto it = str.begin();
-	return qi::parse( it, str.end(), parseFE, e );
+	return qi::parse( it, str.end(), parseFE, edges );
 }
 
