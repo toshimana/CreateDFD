@@ -1,14 +1,22 @@
 #include "CreateDFD.h"
+#include "CreateDFD_Impl.h"
 
-#include <sstream>
+static std::string
+outputDot( const std::string& body )
+{
+	std::stringstream ss;
+	ss << "digraph mygraph {" << std::endl;
+	ss << body;
+	ss << "}" << std::endl;
+
+	return ss.str();
+}
 
 std::string 
 CreateDFD::convert( const std::string& in )
 {
-	std::stringstream ss;
-	ss << "digraph mygraph {" << std::endl;
-	ss << "\tA -> Test -> B" << std::endl;
-	ss << "}" << std::endl;
+	FuncEdge fe;
+	bool ret = CreateDFD::Impl::parse( in, fe );
 
-	return ss.str();
+	return outputDot( fe.output() );
 }
