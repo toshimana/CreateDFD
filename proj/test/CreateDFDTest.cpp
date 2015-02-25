@@ -31,14 +31,23 @@ void CreateDFDTest::TearDownTestCase(void)
 }
 
 static std::string
-createNode( const std::string& A, const std::string& B )
+createFNode( const std::string& A )
+{
+	std::stringstream ss;
+	ss << '\t' << A << "[shape=diamond]" << std::endl;
+	return ss.str();
+}
+
+static std::string
+createEdge( const std::string& A, const std::string& B )
 {
 	std::stringstream ss;
 	ss << '\t' << A << " -> " << B << std::endl;
 	return ss.str();
 }
 
-#define NODE(A,B) createNode(#A,#B)
+#define FNODE(A)  createFNode(#A)
+#define EDGE(A,B) createEdge(#A,#B)
 
 TEST_F( CreateDFDTest, SingleTest )
 {
@@ -48,8 +57,9 @@ TEST_F( CreateDFDTest, SingleTest )
 
 	std::stringstream ss;
 	ss << "digraph mygraph {" << std::endl;
-	ss << NODE( A, Test );
-	ss << NODE( Test, B );
+	ss << FNODE( Test );
+	ss << EDGE( A, Test );
+	ss << EDGE( Test, B );
 	ss << "}" << std::endl;
 
 	ASSERT_THAT( actual, StrEq( ss.str() ) );
@@ -63,8 +73,9 @@ TEST_F( CreateDFDTest, Single2Test )
 
 	std::stringstream ss;
 	ss << "digraph mygraph {" << std::endl;
-	ss << NODE( C, Func );
-	ss << NODE( Func, D );
+	ss << FNODE( Func );
+	ss << EDGE( C, Func );
+	ss << EDGE( Func, D );
 	ss << "}" << std::endl;
 
 	ASSERT_THAT( actual, StrEq( ss.str() ) );
@@ -78,10 +89,11 @@ TEST_F( CreateDFDTest, MultiNodeTest )
 
 	std::stringstream ss;
 	ss << "digraph mygraph {" << std::endl;
-	ss << NODE( A, Test );
-	ss << NODE( B, Test );
-	ss << NODE( Test, C );
-	ss << NODE( Test, D );
+	ss << FNODE( Test );
+	ss << EDGE( A, Test );
+	ss << EDGE( B, Test );
+	ss << EDGE( Test, C );
+	ss << EDGE( Test, D );
 	ss << "}" << std::endl;
 
 	ASSERT_THAT( actual, StrEq( ss.str() ) );

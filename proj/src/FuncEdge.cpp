@@ -15,6 +15,7 @@ std::string
 CreateDFD::FuncEdge::output() const
 {
 	std::stringstream ss;
+	ss << '\t' << func << "[shape=diamond]" << std::endl;
 	BOOST_FOREACH( const std::string& node, inNodes ){
 		ss << createEdge( node, func );
 	}
