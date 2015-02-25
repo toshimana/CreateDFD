@@ -103,3 +103,21 @@ TEST_F( CreateDFDTest, MultiNodeTest )
 
 	ASSERT_THAT( actual, StrEq( createDot( ss.str() ) ) );
 }
+
+TEST_F( CreateDFDTest, MultiEdgeTest )
+{
+	std::string input( "Test[A][B]\nFunc[B][C]" );
+	
+	std::string actual = CreateDFD::convert( input );
+
+	std::stringstream ss;
+	ss << FNODE( Test );
+	ss << FNODE( Func );
+	ss << EDGE( A, Test );
+	ss << EDGE( Test, B );
+	ss << EDGE( B, Func );
+	ss << EDGE( Func, C );
+
+	ASSERT_THAT( actual, StrEq( createDot( ss.str() ) ) );
+}
+
