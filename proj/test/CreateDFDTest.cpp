@@ -7,28 +7,7 @@ using namespace ::testing;
 
 class CreateDFDTest : public ::testing::Test
 {
- protected:
-  virtual void SetUp(void);
-  virtual void TearDown(void);
-  static  void SetUpTestCase(void);
-  static  void TearDownTestCase(void); 
 };
-
-void CreateDFDTest::SetUp(void)
-{
-}
-
-void CreateDFDTest::TearDown(void)
-{
-}
-
-void CreateDFDTest::SetUpTestCase(void)
-{
-}
-
-void CreateDFDTest::TearDownTestCase(void)
-{
-}
 
 static std::string
 createDot( const std::string& body )

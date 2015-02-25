@@ -2,6 +2,13 @@ PROJECT( CreateDFDTest )
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
+# Boost
+FIND_PACKAGE( Boost REQUIRED )
+IF ( Boost_FOUND )
+  INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
+ENDIF()
+
+
 # GMock
 FIND_PATH( GMOCK_ROOT gmock/gmock.hpp
 				/usr/local/include )
