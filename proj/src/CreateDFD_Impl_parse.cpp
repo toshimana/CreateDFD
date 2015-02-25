@@ -8,8 +8,8 @@
 BOOST_FUSION_ADAPT_STRUCT (
 	CreateDFD::FuncEdge,
 	( std::string, func )
-	( std::string, inNode )
-	( std::string, outNode )
+	( std::vector<std::string>, inNodes )
+	( std::vector<std::string>, outNodes )
 	)
 
 /*****************************************************************************/
@@ -34,14 +34,16 @@ namespace CreateDFD
 		{
 			qi::rule<Iterator, FuncEdge()>    result;
 			qi::rule<Iterator, std::string()> func;
+			qi::rule<Iterator, std::vector<std::string>()> nodes;
 			qi::rule<Iterator, std::string()> node;
 
 			parseFuncEdge()
 				: parseFuncEdge::base_type(result)
 			{
-				result  = func >> node >> node >> qi::eol;
+				result  = func >> nodes >> nodes >> qi::eol;
 				func %= qi::lexeme[+(qi::char_ - qi::lit( '[' ))];
-				node = qi::lit( '[' ) >> qi::lexeme[+(qi::char_ - qi::lit( ']' ))] >> qi::lit( ']' );
+				nodes = qi::lit( '[' ) >> node % qi::lit( ',' ) >> qi::lit( ']' );
+				node  = qi::lexeme[+(qi::char_ - (qi::lit( ',' ) | qi::lit( ']' )))];
 			}
 		};
 	};

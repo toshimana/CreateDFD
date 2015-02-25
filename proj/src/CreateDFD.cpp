@@ -1,6 +1,8 @@
 #include "CreateDFD.h"
 #include "CreateDFD_Impl.h"
 
+#include <sstream>
+
 static std::string
 outputDot( const std::string& body )
 {

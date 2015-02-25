@@ -82,6 +82,7 @@ TEST_F( CreateDFDTest, MultiNodeTest )
 	ss << NODE( B, Test );
 	ss << NODE( Test, C );
 	ss << NODE( Test, D );
+	ss << "}" << std::endl;
 
 	ASSERT_THAT( actual, StrEq( ss.str() ) );
 }
