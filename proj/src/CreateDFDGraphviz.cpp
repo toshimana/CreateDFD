@@ -60,6 +60,5 @@ CreateDFDGraphviz::createDFD( const std::string& inFile )
 	cmd << DOTPATH << ' ';
 	cmd << "-Kdot -Tpdf ";
 	cmd << dotPath.path.string() << " -o " << outFile.string();
-	std::cout << cmd.str().c_str() << std::endl;
 	return system( cmd.str().c_str() );
 }
