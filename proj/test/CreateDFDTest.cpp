@@ -121,3 +121,30 @@ TEST_F( CreateDFDTest, SingleInputOnlyTest )
 	
 	ASSERT_THAT( actual, StrEq( createDot( ss.str() ) ) );
 }
+
+TEST_F( CreateDFDTest, SingleOutputOnlyTest )
+{
+	std::string input( "Test[][A]" );
+	
+	std::string actual = CreateDFD::convert( input );
+
+	std::stringstream ss;
+	ss << FNODE( Test );
+	ss << EDGE( Test, A );
+	
+	ASSERT_THAT( actual, StrEq( createDot( ss.str() ) ) );
+}
+
+TEST_F( CreateDFDTest, AnyEOLTest )
+{
+	std::string input( "Test[A][B]\n\n\n" );
+	
+	std::string actual = CreateDFD::convert( input );
+
+	std::stringstream ss;
+	ss << FNODE( Test );
+	ss << EDGE( A, Test );
+	ss << EDGE( Test, B );
+	
+	ASSERT_THAT( actual, StrEq( createDot( ss.str() ) ) );
+}

@@ -41,7 +41,7 @@ namespace CreateDFD
 			parseFuncEdge()
 				: parseFuncEdge::base_type(result)
 			{
-				result = edge % qi::eol;
+				result = edge % qi::eol >> *qi::eol;
 				edge = func >> nodes >> nodes;
 				func %= qi::lexeme[+(qi::char_ - qi::lit( '[' ))];
 				nodes %= qi::lit( '[' ) >> ( node % qi::lit( ',' ) >> qi::lit( ']' ) | qi::lit( ']' ) );
