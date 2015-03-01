@@ -44,8 +44,8 @@ namespace CreateDFD
 				result = edge % qi::eol;
 				edge = func >> nodes >> nodes;
 				func %= qi::lexeme[+(qi::char_ - qi::lit( '[' ))];
-				nodes = qi::lit( '[' ) >> node % qi::lit( ',' ) >> qi::lit( ']' );
-				node  = qi::lexeme[+(qi::char_ - (qi::lit( ',' ) | qi::lit( ']' )))];
+				nodes %= qi::lit( '[' ) >> ( node % qi::lit( ',' ) >> qi::lit( ']' ) | qi::lit( ']' ) );
+				node  %= qi::lexeme[+(qi::char_ - (qi::lit( ',' ) | qi::lit( ']' )))];
 			}
 		};
 	};
@@ -58,6 +58,7 @@ CreateDFD::Impl::parse( const std::string& in, std::vector<FuncEdge>& edges )
 
 	std::string str( in );
 	auto it = str.begin();
-	return qi::parse( it, str.end(), parseFE, edges );
+	bool ret = qi::parse( it, str.end(), parseFE, edges );
+	return ( ret && ( it == str.end() ) );
 }
 

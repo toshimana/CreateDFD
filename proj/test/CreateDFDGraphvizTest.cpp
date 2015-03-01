@@ -35,11 +35,7 @@ TEST_F( CreateDFDGraphvizTest, ConvertTest )
 {
 	{
 		std::ofstream ofs( tempPath.string() );
-		ofs << "digraph mygraph {" << std::endl;
-		ofs << "\tFunc[shape=diamond]" << std::endl;
-		ofs << "\tA -> Func" << std::endl;
-		ofs << "\tFunc -> B" << std::endl;
-		ofs << "}" << std::endl;
+		ofs << "Func[A][B]";
 	}
 
 	int ret = CreateDFDGraphviz::createDFD( tempPath.string() );

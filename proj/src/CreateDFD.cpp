@@ -65,6 +65,8 @@ CreateDFD::convert( const std::string& in )
 	std::vector<FuncEdge> edges;
 	bool ret = CreateDFD::Impl::parse( in, edges );
 
+	if ( !ret ) return "";
+
 	DFD dfd;
 	convertToDFD( edges, dfd );
 

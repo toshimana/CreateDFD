@@ -100,3 +100,24 @@ TEST_F( CreateDFDTest, MultiEdgeTest )
 	ASSERT_THAT( actual, StrEq( createDot( ss.str() ) ) );
 }
 
+TEST_F( CreateDFDTest, ParseFailTest )
+{
+	std::string input( "Test[A][][]" );
+	
+	std::string actual = CreateDFD::convert( input );
+
+	ASSERT_THAT( actual, StrEq( "" ) );
+}
+
+TEST_F( CreateDFDTest, SingleInputOnlyTest )
+{
+	std::string input( "Test[A][]" );
+	
+	std::string actual = CreateDFD::convert( input );
+
+	std::stringstream ss;
+	ss << FNODE( Test );
+	ss << EDGE( A, Test );
+	
+	ASSERT_THAT( actual, StrEq( createDot( ss.str() ) ) );
+}
