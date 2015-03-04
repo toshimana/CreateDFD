@@ -148,3 +148,21 @@ TEST_F( CreateDFDTest, AnyEOLTest )
 	
 	ASSERT_THAT( actual, StrEq( createDot( ss.str() ) ) );
 }
+
+TEST_F( CreateDFDTest, DuplicateTest )
+{
+	std::string input( "Test[A][B]\nTest[C][D]\n" );
+	
+	std::string actual = CreateDFD::convert( input );
+
+	std::stringstream ss;
+	ss << FNODE( Test_000 );
+	ss << FNODE( Test_001 );
+	ss << EDGE( A, Test_000 );
+	ss << EDGE( Test_000, B );
+	ss << EDGE( C, Test_001 );
+	ss << EDGE( Test_001, D );
+	
+	ASSERT_THAT( actual, StrEq( createDot( ss.str() ) ) );
+}
+

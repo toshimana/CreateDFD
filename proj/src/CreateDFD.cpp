@@ -2,8 +2,11 @@
 #include "CreateDFD_Impl.h"
 
 #include <sstream>
+#include <map>
+#include <numeric>
 #include <boost/foreach.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/format.hpp>
 
 namespace fs = boost::filesystem;
 
@@ -59,6 +62,39 @@ convertToDFD( const std::vector<CreateDFD::FuncEdge>& edges, CreateDFD::DFD& dfd
 	}
 }
 
+static void
+renameDuplicateEdges( const std::vector<CreateDFD::FuncEdge>& in, std::vector<CreateDFD::FuncEdge>& out )
+{
+	// ŠÖ”‚Ì“oê•p“x‚Ì‹L˜^
+	std::map<std::string, int> counter;
+	BOOST_FOREACH( const CreateDFD::FuncEdge& fe, in ) {
+		if ( counter.find( fe.func ) == counter.end() ) {
+			counter[fe.func] = 1;
+		}
+		else {
+			++counter[fe.func];
+		}
+	}
+	
+	// 2‰ñˆÈã“oê‚·‚éŠÖ”‚ÍID‚ğŠ„‚è“–‚Ä‚é
+	std::map<std::string, int> idCounter;
+	BOOST_FOREACH( CreateDFD::FuncEdge fe, in ) {
+		if ( counter[fe.func] == 1 ) {
+			out.push_back( fe );
+		}
+		else {
+			if ( idCounter.find(fe.func) == idCounter.end() ){
+				idCounter[fe.func] = 0;
+			}
+			std::stringstream ss;
+			ss << (boost::format( "%s_%03d" ) % fe.func % idCounter[fe.func]++).str();
+
+			fe.func = ss.str();
+			out.push_back( fe );
+		}
+	}
+}
+
 std::string 
 CreateDFD::convert( const std::string& in )
 {
@@ -67,8 +103,11 @@ CreateDFD::convert( const std::string& in )
 
 	if ( !ret ) return "";
 
+	std::vector<FuncEdge> renamedEdges;
+	renameDuplicateEdges( edges, renamedEdges );
+
 	DFD dfd;
-	convertToDFD( edges, dfd );
+	convertToDFD( renamedEdges, dfd );
 
 	return outputDot( dfd.output() );
 }
