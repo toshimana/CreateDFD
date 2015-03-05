@@ -166,3 +166,34 @@ TEST_F( CreateDFDTest, DuplicateTest )
 	ASSERT_THAT( actual, StrEq( createDot( ss.str() ) ) );
 }
 
+TEST_F( CreateDFDTest, NoNameFuncTest )
+{
+	std::string input( "[A][B]\n" );
+	
+	std::string actual = CreateDFD::convert( input );
+
+	std::stringstream ss;
+	ss << FNODE( 000 );
+	ss << EDGE( A, 000 );
+	ss << EDGE( 000, B );
+	
+	ASSERT_THAT( actual, StrEq( createDot( ss.str() ) ) );
+}
+
+TEST_F( CreateDFDTest, NoNameMultiFuncTest )
+{
+	std::string input( "[A][B]\n[C][D]\n" );
+	
+	std::string actual = CreateDFD::convert( input );
+
+	std::stringstream ss;
+	ss << FNODE( 000 );
+	ss << FNODE( 001 );
+	ss << EDGE( A, 000 );
+	ss << EDGE( 000, B );
+	ss << EDGE( C, 001 );
+	ss << EDGE( 001, D );
+	
+	ASSERT_THAT( actual, StrEq( createDot( ss.str() ) ) );
+}
+

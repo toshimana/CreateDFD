@@ -62,6 +62,19 @@ convertToDFD( const std::vector<CreateDFD::FuncEdge>& edges, CreateDFD::DFD& dfd
 	}
 }
 
+template<typename T> static void
+addRenamedFuncEdge( CreateDFD::FuncEdge fe, boost::basic_format<T> format, std::vector<CreateDFD::FuncEdge>& out, std::map<std::string,int>& idCounter )
+{
+	if ( idCounter.find( fe.func ) == idCounter.end() ){
+		idCounter[fe.func] = 0;
+	}
+	std::stringstream ss;
+	ss << ( format % idCounter[fe.func]++).str();
+
+	fe.func = ss.str();
+	out.push_back( fe );
+}
+
 static void
 renameDuplicateEdges( const std::vector<CreateDFD::FuncEdge>& in, std::vector<CreateDFD::FuncEdge>& out )
 {
@@ -78,19 +91,17 @@ renameDuplicateEdges( const std::vector<CreateDFD::FuncEdge>& in, std::vector<Cr
 	
 	// 2‰ñˆÈã“oê‚·‚éŠÖ”‚ÍID‚ðŠ„‚è“–‚Ä‚é
 	std::map<std::string, int> idCounter;
-	BOOST_FOREACH( CreateDFD::FuncEdge fe, in ) {
-		if ( counter[fe.func] == 1 ) {
-			out.push_back( fe );
+	BOOST_FOREACH( const CreateDFD::FuncEdge& fe, in ) {
+		if ( fe.func == "" ) {
+			addRenamedFuncEdge( fe, boost::format("%03d"), out, idCounter );
 		}
 		else {
-			if ( idCounter.find(fe.func) == idCounter.end() ){
-				idCounter[fe.func] = 0;
+			if ( counter[fe.func] == 1 ) {
+				out.push_back( fe );
 			}
-			std::stringstream ss;
-			ss << (boost::format( "%s_%03d" ) % fe.func % idCounter[fe.func]++).str();
-
-			fe.func = ss.str();
-			out.push_back( fe );
+			else {
+				addRenamedFuncEdge( fe, boost::format( "%s_%03d" ) % fe.func, out, idCounter );
+			}
 		}
 	}
 }

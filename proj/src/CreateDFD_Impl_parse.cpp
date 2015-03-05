@@ -43,7 +43,7 @@ namespace CreateDFD
 			{
 				result = edge % qi::eol >> *qi::eol;
 				edge = func >> nodes >> nodes;
-				func %= qi::lexeme[+(qi::char_ - qi::lit( '[' ))];
+				func %= qi::lexeme[*(qi::char_ - qi::lit( '[' ))];
 				nodes %= qi::lit( '[' ) >> ( node % qi::lit( ',' ) >> qi::lit( ']' ) | qi::lit( ']' ) );
 				node  %= qi::lexeme[+(qi::char_ - (qi::lit( ',' ) | qi::lit( ']' )))];
 			}
